@@ -7,7 +7,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *  itemOperations={"get"},
+ *  collectionOperations={"get"}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
 class Product
