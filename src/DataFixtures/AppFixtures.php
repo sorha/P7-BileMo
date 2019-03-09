@@ -6,9 +6,17 @@ use App\Entity\User;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         // === Products ===
@@ -39,13 +47,13 @@ class AppFixtures extends Fixture
         // === Users ===
         $user = new User();
         $user->setEmail('user1@test.com')
-             ->setPassword('$2y$10$uh1FaHYFGL8v00o7JMNrr.jH9XbnIyqM3E2gqIRjqWyXaE7o7l8vS') // 'test' via bcrypt
+             ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
         ;
         $manager->persist($user);
 
         $user = new User();
         $user->setEmail('user2@test.com')
-             ->setPassword('$2y$10$uh1FaHYFGL8v00o7JMNrr.jH9XbnIyqM3E2gqIRjqWyXaE7o7l8vS') // 'test' via bcrypt
+             ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
         ;
         $manager->persist($user);
 
