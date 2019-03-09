@@ -29,10 +29,16 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=100, unique=true)
+     * @Assert\NotBlank
+     * @Groups({"read"})
+     */
+    private $username;
+
+    /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
      * @Assert\Email
-     * @Groups({"read"})
      */
     private $email;
 
@@ -72,7 +78,14 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     /**

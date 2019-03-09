@@ -46,13 +46,15 @@ class AppFixtures extends Fixture
 
         // === Users ===
         $user = new User();
-        $user->setEmail('user1@test.com')
+        $user->setUsername('user1')
+             ->setEmail('user1@test.com')
              ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
         ;
         $manager->persist($user);
 
         $user = new User();
-        $user->setEmail('user2@test.com')
+        $user->setUsername('user2')
+             ->setEmail('user2@test.com')
              ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
         ;
         $manager->persist($user);
