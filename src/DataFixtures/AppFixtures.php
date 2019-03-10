@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\Client;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -44,20 +45,43 @@ class AppFixtures extends Fixture
         ;
         $manager->persist($product);
 
-        // === Users ===
-        $user = new User();
-        $user->setUsername('user1')
-             ->setEmail('user1@test.com')
-             ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
-        ;
-        $manager->persist($user);
+        // === Clients ===
+        $client = new Client();
+        $client->setName('Orange');
+        $this->addReference('Orange', $client);
+        $manager->persist($client);
 
-        $user = new User();
-        $user->setUsername('user2')
-             ->setEmail('user2@test.com')
-             ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
-        ;
-        $manager->persist($user);
+        $client = new Client();
+        $client->setName('SFR');
+        $this->addReference('SFR', $client);
+        $manager->persist($client);
+
+        // === Users ===
+        // 10 users from Orange
+        for($i=1; $i<=10; $i++)
+        {
+            $user = new User();
+            $client = $this->getReference('Orange');
+            $user->setUsername('user'.$i.$client->getName())
+                ->setEmail('user'.$i.$client->getName().'@test.com')
+                ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
+                ->setClient($client)
+            ;
+            $manager->persist($user);
+        }
+        
+        // 10 users from SFR
+        for($i=1; $i<=10; $i++)
+        {
+            $user = new User();
+            $client = $this->getReference('SFR');
+            $user->setUsername('user'.$i.$client->getName())
+                ->setEmail('user'.$i.$client->getName().'@test.com')
+                ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
+                ->setClient($client)
+            ;
+            $manager->persist($user);
+        }
 
         $manager->flush();
     }
