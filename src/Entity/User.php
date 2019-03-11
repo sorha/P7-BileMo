@@ -9,9 +9,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * When users are get by using api/clients/id/users don't show the client
  * @ApiResource(
  *  itemOperations={"get"},
- *  collectionOperations={"get"},
+ *  collectionOperations={
+ *      "get",
+ *      "api_clients_users_get_subresource"={
+ *          "normalization_context"={
+ *               "groups"={"clients_users_get_subresource"}
+ *          }
+ *      }
+ *  },
  *  normalizationContext={
  *      "groups"={"read"}
  *  }
@@ -24,14 +32,14 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"read"})
+     * @Groups({"read", "clients_users_get_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100, unique=true)
      * @Assert\NotBlank
-     * @Groups({"read"})
+     * @Groups({"read", "clients_users_get_subresource"})
      */
     private $username;
 
@@ -57,6 +65,7 @@ class User implements UserInterface
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read"})
      */
     private $client;
 
