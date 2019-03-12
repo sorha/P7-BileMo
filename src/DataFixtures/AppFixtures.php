@@ -83,6 +83,27 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
+        // === Admin Users===
+        $user = new User();
+        $client = $this->getReference('Orange');
+        $user->setUsername('admin'.$client->getName())
+            ->setEmail('admin'.$client->getName().'@test.com')
+            ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
+            ->setClient($client)
+            ->setRoles([User::ROLE_ADMIN])
+        ;
+        $manager->persist($user);
+
+        $user = new User();
+        $client = $this->getReference('SFR');
+        $user->setUsername('admin'.$client->getName())
+            ->setEmail('admin'.$client->getName().'@test.com')
+            ->setPassword($this->passwordEncoder->encodePassword($user, 'test'))
+            ->setClient($client)
+            ->setRoles([User::ROLE_ADMIN])
+        ;
+        $manager->persist($user);
+
         $manager->flush();
     }
 }

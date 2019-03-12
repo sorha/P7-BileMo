@@ -11,9 +11,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * When users are get by using api/clients/id/users don't show the client
  * @ApiResource(
- *  itemOperations={"get"},
+ *  itemOperations={
+ *      "get",
+ *      "put"={
+ *          "access_control"="is_granted('ROLE_ADMIN')"
+ *      },
+ *      "delete"={
+ *          "access_control"="is_granted('ROLE_ADMIN')"
+ *      }
+ *  },
  *  collectionOperations={
  *      "get",
+ *      "post"={
+ *          "access_control"="is_granted('ROLE_ADMIN')"
+ *      },
  *      "api_clients_users_get_subresource"={
  *          "normalization_context"={
  *               "groups"={"clients_users_get_subresource"}
@@ -28,6 +39,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
