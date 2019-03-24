@@ -36,7 +36,7 @@ security:
         # Used to login to admin panel using login form
         admin:
             anonymous: ~
-            pattern: ^/admin
+            pattern: ^/
             form_login:
                 check_path: admin_login
                 login_path: admin_login
