@@ -21,8 +21,15 @@ Création d'une API Rest pour BileMo, une entreprise de vente de téléphone fic
 ```
     php bin/console doctrine:migrations:migrate
 ```
-6. (Optionnel) Installer les fixtures pour avoir une démo de données fictives :
+6. Générer les clés SSH ([Solution alternative pour OpenSSL sur Windows](https://slproweb.com/products/Win32OpenSSL.html))
+Et noter votre passphrase à la ligne "JWT_PASSPHRASE=" de votre fichier `.env.local`
+```bash
+$ mkdir config/jwt
+$ openssl genrsa -out config/jwt/private.pem -aes256 4096
+$ openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+```
+7. (Optionnel) Installer les fixtures pour avoir une démo de données fictives :
 ```
     php bin/console doctrine:fixtures:load
 ```
-7. Félications le projet est installé correctement, vous pouvez désormais commencer à l'utiliser à votre guise !
+8. Félications le projet est installé correctement, vous pouvez désormais commencer à l'utiliser à votre guise !
