@@ -20,38 +20,29 @@ class PasswordHashSubscriberTest extends TestCase
         $this->assertArrayHasKey(KernelEvents::VIEW, $result);
         $this->assertEquals(['hashPassword', EventPriorities::PRE_WRITE], $result[KernelEvents::VIEW]);
     }
-
-    public function testHashPassword()
+    
+    public function providerHashPassword()
     {
-        // Scénario 1, class qui existe, doit appeler setPassword
-        $entityMock = $this->getEntityMock(User::class, true);
-        $requestMock = $this->getRequestMock('POST');
+        return [
+            // If everything is ok
+            [User::class, true, 'POST', true],
+            [User::class, true, 'PUT', true],
+            // If class isn't right
+            ['BadClass', false, 'POST', false],
+            // If method isn't PUT or POST
+            [User::class, false, 'GET', false]
+        ];
+    }
+    
+    /**
+     * @dataProvider providerHashPassword
+     */
+    public function testHashPassword($classname, bool $shouldCallSetPassword, string $method, bool $shouldEncodePasswordBeCalled)
+    {
+        $entityMock = $this->getEntityMock($classname, $shouldCallSetPassword);
+        $requestMock = $this->getRequestMock($method);
         $eventMock = $this->getEventMock($entityMock, $requestMock);
-        $encoderMock = $this->getEncoderMock(true);
-
-        (new PasswordHashSubscriber($encoderMock))->hashPassword($eventMock);
-
-        // Scénario 2, class qui n'existe pas ne doit pas setPassword
-        $entityMock = $this->getEntityMock('NonExtisting', false);
-        $requestMock = $this->getRequestMock('POST');
-        $eventMock = $this->getEventMock($entityMock, $requestMock);
-        $encoderMock = $this->getEncoderMock(false);
-
-        (new PasswordHashSubscriber($encoderMock))->hashPassword($eventMock);
-
-        // Scénario 3, méthode PUT
-        $entityMock = $this->getEntityMock(User::class, true);
-        $requestMock = $this->getRequestMock('PUT');
-        $eventMock = $this->getEventMock($entityMock, $requestMock);
-        $encoderMock = $this->getEncoderMock(true);
-
-        (new PasswordHashSubscriber($encoderMock))->hashPassword($eventMock);
-
-        // Scénario 3, méthode GET
-        $entityMock = $this->getEntityMock(User::class, false);
-        $requestMock = $this->getRequestMock('GET');
-        $eventMock = $this->getEventMock($entityMock, $requestMock);
-        $encoderMock = $this->getEncoderMock(false);
+        $encoderMock = $this->getEncoderMock($shouldEncodePasswordBeCalled);
 
         (new PasswordHashSubscriber($encoderMock))->hashPassword($eventMock);
     }
