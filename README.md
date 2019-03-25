@@ -1,5 +1,7 @@
 # P7-BileMo
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/05b86a0fd9a94d6290d213d4fb3dd6b8)](https://app.codacy.com/app/sorha/P7-BileMo?utm_source=github.com&utm_medium=referral&utm_content=sorha/P7-BileMo&utm_campaign=Badge_Grade_Dashboard)
+
 Création d'une API Rest pour BileMo, une entreprise de vente de téléphone fictive.
 
 ## Environnement utilisé durant le développement
